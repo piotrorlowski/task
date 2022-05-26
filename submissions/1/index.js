@@ -24,7 +24,7 @@ const itemMapping = {
 
 let times = 0;
 
-while (times <= 500) { 
+while (times < 500) { 
   times++;
   const item = randomItem(Math.random());
   itemMapping[item.id].push(item);
