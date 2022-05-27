@@ -25,16 +25,11 @@
 
   const renderHeading = array => {
     const score = array[0].score
-    const headings = [
-      'Items with Score 50',
-      'Items with Score 30',
-      'Items with Score 20',
-    ]
-    if (score == 50) {
-      return headings[0];
-    } else if (score == 30) {
-      return headings[1];
+    const headings = {
+      50: 'Items with Score 50',
+      30: 'Items with Score 30',
+      20: 'Items with Score 20',
     }
-    return headings[2];
+    return headings[score];
   }
 </script>

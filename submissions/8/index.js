@@ -1,21 +1,7 @@
 import feathers from '@feathersjs/feathers';
 const app = feathers();
-import { Account } from './models.js';
+import { AccountsService } from './services.js';
 
-class AccountsService {
-  constructor() {
-    this.accounts = [];
-  }
-
-  async find() {
-    return await Account.findAll({where: {active: true}});
-  }
-
-  async create(data) {
-    const { name, active } = data;
-    return Account.create({ name, active });
-  }
-}
 
 app.use('accounts', new AccountsService());
 
