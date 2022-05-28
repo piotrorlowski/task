@@ -10,7 +10,7 @@ const randomItem = input =>
     	const sum = projects.slice(0, i + 1).reduce((acc, item) => {
             return acc + item.probability;
         }, 0);
-        return input < sum;
+      return input < sum;
     });
 
 const [item1, item2, item3, item4] = [[], [], [], []];

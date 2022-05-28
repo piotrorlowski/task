@@ -1,7 +1,16 @@
-import sequelize from "./db.js";
 import Sequelize from 'sequelize';
-
+import sequelize from "./db.js";
+/**
+ * Because of default Sequalize fields I renamed:
+ * created_at to createdAt;
+ * updated_at to updatedAt;
+ */
 const Account = sequelize.define('account', {
+  id: {
+    type: Sequelize.UUID, 
+    defaultValue: Sequelize.UUIDV4,
+    primaryKey: true,
+  },
   name: {
     type: Sequelize.STRING,
   },
@@ -11,11 +20,21 @@ const Account = sequelize.define('account', {
 });
 
 const Campaign = sequelize.define('campaign', {
+  id: {
+    type: Sequelize.UUID, 
+    defaultValue: Sequelize.UUIDV4,
+    primaryKey: true,
+  },
   name: {
     type: Sequelize.STRING,
   },
   account_id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID, 
+    defaultValue: Sequelize.UUIDV4,
+    references: {
+      model: Account,
+      key: 'id',
+    }
   },
   start_date: {
     type: Sequelize.DATE,
@@ -26,8 +45,18 @@ const Campaign = sequelize.define('campaign', {
 });
 
 const Click = sequelize.define('click', {
+  id: {
+    type: Sequelize.UUID, 
+    defaultValue: Sequelize.UUIDV4,
+    primaryKey: true,
+  },
   campaign_id: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    references: {
+      model: Campaign,
+      key: 'id',
+    }
   },
 });
 
