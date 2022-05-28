@@ -3,6 +3,7 @@ import { app } from './app.js';
 import sequelize from "./db.js";
 
 const main = async () => {
+  // Destroy previous data
   Account.destroy({ where: {} });
   Campaign.destroy({ where: {} });
   Click.destroy({ where: {} });
@@ -25,6 +26,10 @@ const main = async () => {
   const campaignsThree = range(4);
 
   const accountTrx = await sequelize.transaction();
+  const campaignTrx = await sequelize.transaction();
+  const clicksTrx = await sequelize.transaction();
+
+  // Create dummy data
 
   accountNames.forEach(async item => {
     await app.service('accounts').create({
@@ -45,7 +50,7 @@ const main = async () => {
       account_id: accountOne.id,
       start_date: new Date(2022, 4, 1),
       end_date: new Date(2022, 4, 4),
-    });
+    }, { transaction: campaignTrx });
   });
 
   campaignsTwo.forEach(async item => {
@@ -54,7 +59,7 @@ const main = async () => {
       account_id: accountTwo.id,
       start_date: new Date(2022, 4, 1),
       end_date: new Date(2022, 4, 4),
-    });
+    }, { transaction: campaignTrx });
   });
 
   campaignsThree.forEach(async item => {
@@ -63,8 +68,10 @@ const main = async () => {
       account_id: accountThree.id,
       start_date: new Date(2022, 4, 1),
       end_date: new Date(2022, 4, 4),
-    });
+    }, { transaction: campaignTrx });
   });
+
+  await campaignTrx.commit();
 
   const createdCampaignsOne = await Campaign.findAll({ where: { account_id: accountOne.id } });
   const createdCampaignsTwo = await Campaign.findAll({ where: { account_id: accountTwo.id } });
@@ -73,20 +80,22 @@ const main = async () => {
   createdCampaignsOne.forEach(async item => {
     await app.service('clicks').create({
       campaign_id: item.id,
-    });
+    }, { transaction: clicksTrx });
   })
 
   createdCampaignsTwo.forEach(async item => {
     await app.service('clicks').create({
       campaign_id: item.id,
-    });
+    }, { transaction: clicksTrx });
   })
 
   createdCampaignsThree.forEach(async item => {
     await app.service('clicks').create({
       campaign_id: item.id,
-    });
+    }, { transaction: clicksTrx });
   })
+
+  await clicksTrx.commit();
 };
 
 main();
